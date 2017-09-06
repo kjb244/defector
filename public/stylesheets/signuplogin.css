@@ -1,0 +1,33 @@
+[data-module="signup-login"]{
+  margin-top: 50px !important;
+}
+
+[data-module="signup-login"] .select-container{
+  display: flex;
+}
+
+[data-module="signup-login"] .select-container >div{
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+}
+
+[data-module="signup-login"] .select-container .selected{
+  background-color: #f1ecec;
+}
+
+[data-module="signup-login"] .select-container a{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+[data-module="signup-login"] .sign-up-wrapper, .login-wrapper{
+  padding-top: 30px;
+  padding-bottom: 10px;
+  border: 1px solid #e6e0e0;
+  border-radius: 4px;
+  box-shadow: 4px 4px 4px #ecd4d4;
+}
+[data-module="signup-login"] .button{
+  width: 100%;
+}

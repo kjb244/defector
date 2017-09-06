@@ -1,0 +1,22 @@
+.error-message{
+    display: flex;
+    align-items: center;
+}
+
+.error-message i{
+    color: red;
+    margin-right: 10px;
+}
+
+.error-message span{
+    color: red;
+}
+
+.input-has-error{
+    border: 1px solid red !important;
+}
+
+input+.error-message:not(.ng-hide){
+    margin-top: -5px;
+    margin-bottom: 10px;
+}

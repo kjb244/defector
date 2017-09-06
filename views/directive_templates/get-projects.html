@@ -1,0 +1,38 @@
+<section class="main">
+  <div class="row">
+    <div class="small-12 medium-6 medium-centered columns">
+      <form>
+        <div ng-show="projectnames.length" class="select-type-wrapper">
+          <h5>Select Existing Project</h5>
+          <select ng-model="selectedItem" ng-change="selectOption(selectedItem)">
+            <option disabled selected value>select an option</option>
+            <option ng-selected="selectedItem == project" ng-repeat="project in projectnames" values="project">[[project]]</option>
+          </select>
+
+        </div>
+        <div class="input-type-wrapper">
+          <h5>New Project</h5>
+          <input type="text" name="projectname" placeholder = "enter project" ng-model="form.projectname"/>
+          <p ng-show="form.projectname.length">
+            <a ng-init="form.issues =[]" ng-click="form.issues.push({name:'', description: ''})">Add Defect</a>
+          </p>
+          <div class="input-rows-wrapper" ng-repeat="issue in form.issues">
+            <div class="row">
+              <div class="small-6 columns">
+                <input type="text" placeholder="name" ng-model="issue.name" ng-value="name"/>
+              </div>
+              <div class="small-6 columns">
+                <input type="text" placeholder="description" ng-model="issue.description" ng-value="description"/>
+              </div>
+
+            </div>
+
+          </div>
+          <a href="javascript:void(0);" class="button" ng-click="createProject(form)">Create Project</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</section>

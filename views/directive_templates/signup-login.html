@@ -1,0 +1,51 @@
+<section>
+    <div class="wrapper row">
+    <div class="small-12 medium-8 large-6 large-centered medium-centered columns">
+      <div class="select-container row">
+        <div ng-init="selectedSignup=true" ng-class="{selected:selectedSignup}">
+          <a href="javascript:void(0);" id="signUp" class="select-type" ng-click="selectedSignup=true">Signup</a>
+        </div>
+        <div ng-class="{selected: !selectedSignup}">
+          <a href="javascript:void(0);" id="login" class="select-type" ng-click="selectedSignup=false;">Login</a>
+        </div>
+      </div>
+      <div class="row sign-up-wrapper" ng-show="selectedSignup">
+        <form name="formWrapperSignup">
+          <div class="small-12 columns">
+            <input type="email" placeholder="email" name="email" ng-model="signupform.email" required ng-class="{ 'input-has-error' : (formWrapperSignup.email.$invalid || formWrapperSignup.$error.email) && formWrapperSignup.email.$touched }"/>
+            <div ng-show="(formWrapperSignup.email.$invalid || formWrapperSignup.$error.email) && formWrapperSignup.email.$touched" class="error-message">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span>Email is not valid</span>
+            </div>
+            <input type="text" placeholder="password" name="password" ng-model="signupform.password" required ng-minlength="4" ng-class="{ 'input-has-error' : formWrapperSignup.password.$invalid  && formWrapperSignup.password.$touched }"/>
+            <div ng-show="formWrapperSignup.password.$invalid  && formWrapperSignup.password.$touched" class="error-message">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span>Password is not valid</span>
+            </div>
+            <a class="button" id="signUpButton" ng-disabled="formWrapperSignup.$invalid" ng-click="formWrapperSignup.$valid && clickSubmit('signup', signupform); signupmessage='';">Sign Up</a>
+            <p class="error-message" ng-show="signupmessage.length"><span>[[signupmessage]]</span></p>
+          </div>
+        </form>
+      </div>
+
+      <div class="row login-wrapper" ng-show="!selectedSignup">
+        <form name="formWrapperLogin">
+          <div class="small-12 columns">
+            <input type="email" placeholder="email" name="email" ng-model="loginform.email" required ng-class="{ 'input-has-error' : (formWrapperLogin.email.$invalid || formWrapperLogin.$error.email) && formWrapperLogin.email.$touched }"/>
+            <div ng-show="(formWrapperLogin.email.$invalid || formWrapperLogin.$error.email) && formWrapperLogin.email.$touched" class="error-message">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span>Email is not valid</span>
+            </div>
+            <input type="text" placeholder="password" name="password" ng-model="loginform.password" required ng-minlength="4" ng-class="{ 'input-has-error' : formWrapperLogin.password.$invalid  && formWrapperLogin.password.$touched }"/>
+            <div ng-show="formWrapperLogin.password.$invalid  && formWrapperLogin.password.$touched" class="error-message">
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              <span>Password is not valid</span>
+            </div>
+            <a class="button" id="signUpButton" ng-disabled="formWrapperLogin.$invalid" ng-click="formWrapperLogin.$valid && clickSubmit('login', loginform); loginmessage='';">Login</a>
+            <p class="error-message" ng-show="loginmessage.length"><span>[[loginmessage]]</span></p>
+          </div>
+        </form>
+      </div>
+    </div>
+   </div>
+</section>

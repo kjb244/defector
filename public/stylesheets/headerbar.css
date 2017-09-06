@@ -1,0 +1,18 @@
+.bar{
+    height: 50px;
+    background-color: #497979;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.bar p{
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 3px;
+    color: white;
+}
+
+.row.bar{
+    max-width: 1800px;
+}
