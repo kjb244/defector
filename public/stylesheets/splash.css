@@ -1,0 +1,127 @@
+[data-module="main-container"] .messaging form{
+    display: flex;
+    align-items: center;
+}
+
+[data-module="main-container"] .messaging #message{
+    margin: 0;
+}
+
+[data-module="main-container"] .messaging .button{
+    height: 37px;
+    margin: 0;
+    padding-top: 11px;
+    margin-left: 4px;
+}
+
+[data-module="main-container"] .chats{
+    height: 300px;
+    border: 1px solid #ece4e4;
+    margin-bottom: 4px;
+    overflow-y: auto;
+}
+
+[data-module="main-container"] .chats .chat-row{
+     padding: 6px;
+     background-color: #fbfbfb;
+     margin-bottom: 14px;
+
+ }
+
+[data-module="main-container"] .chats .name-time{
+    display: flex;
+    justify-content: space-between;
+}
+
+[data-module="main-container"] .chats .name{
+    color: red;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+[data-module="main-container"] .chats .time{
+    font-size: 11px;
+}
+
+[data-module="main-container"] .chats .messaging{
+    font-size: 14px;
+    line-height: 16px;
+}
+
+
+[data-module="main-container"] .defect-container{
+    height: 500px;
+}
+
+[data-module="main-container"] .defect-container .checked{
+    margin-right: 20px;
+}
+
+[data-module="main-container"] .defect-container .checked i:hover{
+    cursor: pointer;
+}
+
+[data-module="main-container"] .other-content{
+    transition: .2s linear all;
+    overflow: hidden;
+    height: 115px;
+}
+
+[data-module="main-container"] .other-content .flex-container{
+    display: flex;
+    flex: 1;
+}
+
+[data-module="main-container"] .other-content .flex-container:nth-of-type(1){
+    justify-content: flex-start;
+}
+
+[data-module="main-container"] .other-content .flex-container:nth-of-type(2){
+    justify-content: center;
+}
+
+[data-module="main-container"] .other-content .flex-container:nth-of-type(3){
+    justify-content: flex-end;
+}
+
+[data-module="main-container"] .other-content.ng-hide{
+    height: 0;
+}
+
+[data-module="main-container"] .other-content .status{
+    display: flex;
+    justify-content: space-between;
+}
+
+[data-module="main-container"] .defect-container .defect-row{
+    margin-bottom: 20px;
+    border-bottom:1px solid #d4d1d1;
+}
+
+[data-module="main-container"] .defect-container .name-description{
+    display: flex;
+    margin-bottom: 10px;
+
+}
+
+[data-module="main-container"] .defect-container .claimed-by{
+    margin-left: auto
+
+}
+
+[data-module="main-container"] .defect-container .claimed-by span{
+    border-radius: 30px;
+    background-color: #979abf;
+    color: white;
+    padding: 4px;
+}
+
+
+[data-module="main-container"] .defect-container .button-group{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+

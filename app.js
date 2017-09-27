@@ -8,11 +8,13 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let exphbs = require('express-handlebars');
 let index = require('./routes/index');
-let session   = require('client-sessions');
+let session   = require('express-session');
 let morgan = require('morgan');
 
-
 let app = express();
+app.io = require('socket.io')();
+
+
 
 app.use(morgan('dev'));
 
@@ -30,14 +32,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-    cookieName: 'session',
-    secret: 'random_string_goes_here',
-    duration: 30 * 60 * 1000,
-    activeDuration: 5 * 60 * 1000,
-}));
+app.use(session(
+        {secret: 'keyboard cat',
+        cookie: { maxAge: 10 * 60 * 1000 },
+        rolling: true}
+    )
+);
+
+app.io.sockets.on('connection', function (socket) {
+    console.log('client connect');
+    socket.on('echo', function (data) {
+        app.io.sockets.emit('message', data);
+    });
+});
 
 
+app.use(function(req,res,next){
+    req.io = app.io;
+    next();
+});
 
 app.use('/', index);
 

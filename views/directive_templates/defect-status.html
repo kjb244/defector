@@ -1,0 +1,50 @@
+<section>
+  <h3>Status</h3>
+  <div class="defect-status-container">
+    <div class="search-bar">
+      <input type="text" id="search" name="search" ng-model="search" placeholder="search"/>
+    </div>
+    <div class="defect-container">
+      <div ng-repeat="rec in defects | filter: search | orderBy:orderUserStatus">
+      <div class="defect-row">
+        <div class="name-description">
+          <div class="checked">
+            <i ng-show="rec.status=='completed'" class="fa fa-check fa-lg"></i>
+            <i class="fa fa-square-o fa-lg" ng-show="rec.status!='completed'" ng-click="changeStatus(rec, 'completed')" aria-hidden="true"></i>
+          </div>
+          <div class="main">
+            <a href="javascript:void(0); ng-init="showDetails="false" ng-click="showDetails=!showDetails">
+              [[rec.name]]
+            </a> - [[rec.description]]
+          </div>
+          <div class="claimed-by" ng-show="rec.claimedBy != ''">
+            <span>[[rec.claimedBy.substring(0,2)]]</span>
+          </div>
+
+        </div>
+        <div ng-show="showDetails" class="other-content">
+          <textarea rows="2" name="notes" ng-model="rec.notes" ng-blur="noteUpdate(rec)"></textarea>
+          <div class="button-group">
+            <div class="flex-container">
+              <a href="javascript:void(0)" class="button small" ng-click="claimItem(rec);">Claim</a>
+            </div>
+            <div class="flex-container">
+              <a href="javascript:void(0)" class="button small">Delete</a>
+            </div>
+            <div class="flex-container">
+              <a href="javascript:void(0)" class="button small" ng-click="changeStatus(rec, 'relinquish')">Relinquish</a>
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+
+</section>

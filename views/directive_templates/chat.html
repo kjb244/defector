@@ -1,0 +1,24 @@
+<section>
+  <h3>Chat</h3>
+  <div class="chat-container">
+    <div class="chats">
+      <div ng-repeat="rec in chatarr" class="chat-row">
+        <div class="name-time">
+          <div class="name">[[rec.user]]</div>
+          <div class="time">[[rec.time | date:'MM/dd/yyyy hh:mm']]</div>
+        </div>
+        <div class="message-text">[[rec.message]]</div>
+      </div>
+
+    </div>
+    <div class="messaging">
+      <form>
+        <input type="text" id="message" name="message" placeholder="Message" ng-model="form.message"/>
+        <a href="javascript:void(0);" class="button" ng-click="submitMessage(form)">Submit</a>
+
+      </form>
+
+
+    </div>
+  </div>
+</section>

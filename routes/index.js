@@ -10,12 +10,15 @@ let dbutils = require('../utils/dbutils.js');
 db = db.connect(path.join(__dirname, '..', 'database'), ['securityprincipal', 'projects']);
 
 let sessionChecker = (req, res, next) => {
-    if (req.session.user && req.cookies.user_sid) {
-        res.redirect('/dashboard');
-    } else {
+    console.log('session checker', req.session.user);
+    if (req.session.user) {
         next();
+    } else {
+        return res.json({redirectUrl: '/'})
     }
 };
+
+
 
 router.get('/partials/:name', function (req, res) {
     let name = req.params.name;
@@ -28,17 +31,35 @@ router.get('/directive_templates/:name', function (req, res) {
 });
 
 router.get('/logout', function (req, res) {
-    req.logout();
+    req.session.destroy();
     res.redirect('/');
 });
 
-router.get('/', sessionChecker, function (req, res, next) {
+router.get('/', function (req, res, next) {
 
     res.redirect('signuplogin');
 });
 
 router.get('/signuplogin', function (req, res, next) {
     res.render('signuplogin', {title: 'Express'});
+});
+
+router.get('/getchatdata', function (req, res, next) {
+    let hash = req.query['hash'];
+    let projectArr = dbutils.findAllProjects({project: hash});
+    if (projectArr.length){
+        return res.json(projectArr[0].details.comments);
+    }
+    return res.json({});
+});
+
+router.get('/getdefects', function (req, res, next) {
+    let hash = req.query['hash'];
+    let projectArr = dbutils.findAllProjects({project: hash});
+    if (projectArr.length){
+        return res.json({defects: projectArr[0].details.issues, user: req.session.user});
+    }
+    return res.json({});
 });
 
 router.post('/postsignup', function (req, res, next) {
@@ -54,33 +75,131 @@ router.post('/postsignup', function (req, res, next) {
 
 });
 
-router.post('/postlogin', function(req, res){
-    console.log('here');
-})
 
-router.post('/createproject', function (req, res, next) {
+
+router.post('/postlogin', function(req, res){
+    let data = req.body.data;
+    let userFound = dbutils.findAllSP({email: data.email, password: data.password});
+    if (userFound.length) {
+        req.session.user = data.email;
+        res.json({status: 'valid'});
+
+    }
+});
+
+router.post('/claimchange',sessionChecker, function (req, res, next) {
+    let data = req.body.data;
+    let user = req.session.user;
+    if (!user) return;
+    let projectArr = dbutils.findAllProjects({project: data.hash});
+    if (projectArr.length){
+
+        let details = projectArr[0].details;
+        let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
+        details.issues[recordKey].claimedBy = req.session.user;
+        dbutils.updateProject({project: data.hash}, {details: details});
+        req.io.emit('claim update', details.issues[recordKey]);
+
+
+
+    }
+    res.json({});
+
+
+});
+
+router.post('/changestatus',sessionChecker, function (req, res, next) {
+    let data = req.body.data;
+    let projectArr = dbutils.findAllProjects({project: data.hash});
+    if (projectArr.length){
+        let details = projectArr[0].details;
+        let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
+        details.issues[recordKey].status = data.status;
+        details.issues[recordKey].claimedBy = data.user;
+        dbutils.updateProject({project: data.hash}, {details: details});
+        console.log('in here');
+        req.io.emit('change status', details.issues[recordKey]);
+
+
+
+    }
+    res.json({});
+
+
+});
+
+router.post('/notechange',sessionChecker, function (req, res, next) {
+    let data = req.body.data;
+    console.log(data);
+    let projectArr = dbutils.findAllProjects({project: data.hash});
+    if (projectArr.length){
+        let details = projectArr[0].details;
+        let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
+        details.issues[recordKey].notes = data.currRow.notes;
+        dbutils.updateProject({project: data.hash}, {details: details});
+        req.io.emit('note update', details.issues[recordKey]);
+
+
+
+    }
+    res.json({});
+
+
+});
+
+router.post('/submitmessage',sessionChecker, function(req, res,next){
+    let data = req.body.data;
+    let user = req.session.user;
+    //store in db
+    let projectArr = dbutils.findAllProjects({project: data.hash});
+    if (projectArr.length){
+        let node =projectArr[0].details;
+        node.comments.push({message: data.message,user: user || 'unknown', time: new Date().getTime()});
+
+        dbutils.updateProject({project: data.hash}, {details: node});
+
+        req.io.emit('chat message', node.comments[node.comments.length-1]);
+
+
+    }
+
+
+
+
+    res.json({});
+
+
+});
+
+router.post('/createproject', sessionChecker, function (req, res, next) {
     let data = req.body.data;
     let issues = data.issues || [];
+
 
     let obj = {
         project: data.projectname,
         details: {
             issues: issues.map((e) => {
                 e.notes = '';
-                return e
+                e.status = 'open';
+                e.claimedBy = '';
+                return e;
             }),
             comments: []
         }
     }
-    let projectArr = db.projects.find({project: data.projectname});
+
+    let projectArr = dbutils.findAllProjects({project: data.projectname});
+    console.log(data.projectname);
     if (!projectArr.length) {
+
         db.projects.save(obj);
     }
 
     res.json({project: data.projectname});
 });
 
-router.get('/createselectproject', function (req, res, next) {
+router.get('/createselectproject', sessionChecker, function (req, res, next) {
     res.render('createselectproject', {});
 });
 
@@ -96,6 +215,7 @@ router.get('/getprojects', function (req, res, next) {
 router.get('/splash', function (req, res, next) {
     res.render('splash', {});
 });
+
 
 
 

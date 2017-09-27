@@ -3,9 +3,9 @@ let db = require('diskdb');
 let bcrypt  = require('bcrypt-nodejs');
 let path = require('path');
 
-class Sputils {
+class Dbutils {
     constructor(){
-        db = db.connect(path.join(__dirname, '..', 'database'), ['securityprincipal']);
+        db = db.connect(path.join(__dirname, '..', 'database'), ['securityprincipal', 'projects']);
     }
 
      generateHash(password){
@@ -22,6 +22,14 @@ class Sputils {
 
     }
 
+    findAllProjects(obj){
+        return db.projects.find(obj);
+    }
+
+    updateProject(query, obj, options){
+        return db.projects.update(query, obj);
+    }
+
     findAllSP(obj){
         console.log('here');
         return db.securityprincipal.find(obj);
@@ -32,10 +40,10 @@ class Sputils {
     }
 }
 
-const sputils = new Sputils();
+const dbutils = new Dbutils();
 
 
-module.exports = sputils;
+module.exports = dbutils;
 
 
 

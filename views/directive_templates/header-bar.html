@@ -1,5 +1,17 @@
 <section>
   <div class="row bar">
     <p>Defector</p>
+
+
+  </div>
+  <div class="menu">
+    <div class="cog">
+      <i ng-init="clicked=false;" ng-click="clicked=!clicked;" class="fa fa-cog" aria-hidden="true"></i>
+    </div>
+    <div ng-show="clicked" class="fade">
+      <a href="logout">Log out</a>
+    </div>
+
+
   </div>
 </section>

@@ -23,7 +23,7 @@ app.service("ajaxFetch", function($http) {
     data = data || {};
 
     if('GET' === type){
-      return $http.get(endpoint);
+      return $http.get(endpoint, {params: data});
     }
     else if ('POST' === type){
 
