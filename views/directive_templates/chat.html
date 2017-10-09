@@ -2,10 +2,10 @@
   <h3>Chat</h3>
   <div class="chat-container">
     <div class="chats">
-      <div ng-repeat="rec in chatarr" class="chat-row">
+      <div ng-repeat="rec in chatarr track by $index" class="chat-row">
         <div class="name-time">
           <div class="name">[[rec.user]]</div>
-          <div class="time">[[rec.time | date:'MM/dd/yyyy hh:mm']]</div>
+          <div class="time">[[rec.time | date:'EEE MMM dd hh:mm a']]</div>
         </div>
         <div class="message-text">[[rec.message]]</div>
       </div>

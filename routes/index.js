@@ -46,9 +46,11 @@ router.get('/signuplogin', function (req, res, next) {
 
 router.get('/getchatdata', function (req, res, next) {
     let hash = req.query['hash'];
+    let user = req.session.user;
     let projectArr = dbutils.findAllProjects({project: hash});
     if (projectArr.length){
-        return res.json(projectArr[0].details.comments);
+        let obj = {comments: projectArr[0].details.comments, user};
+        return res.json(obj);
     }
     return res.json({});
 });
@@ -60,6 +62,15 @@ router.get('/getdefects', function (req, res, next) {
         return res.json({defects: projectArr[0].details.issues, user: req.session.user});
     }
     return res.json({});
+});
+
+
+router.get('/getusers', function (req, res, next) {
+    let securityPrincArr = dbutils.findAllSP({});
+    let rtnObj = securityPrincArr.map(function(e){
+        return e.email.substring(0,2);
+    })
+    return res.json(rtnObj);
 });
 
 router.post('/postsignup', function (req, res, next) {
@@ -88,9 +99,9 @@ router.post('/postlogin', function(req, res){
 });
 
 router.post('/claimchange',sessionChecker, function (req, res, next) {
+
     let data = req.body.data;
-    let user = req.session.user;
-    if (!user) return;
+
     let projectArr = dbutils.findAllProjects({project: data.hash});
     if (projectArr.length){
 
@@ -98,7 +109,7 @@ router.post('/claimchange',sessionChecker, function (req, res, next) {
         let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
         details.issues[recordKey].claimedBy = req.session.user;
         dbutils.updateProject({project: data.hash}, {details: details});
-        req.io.emit('claim update', details.issues[recordKey]);
+        req.io.emit('claim update', {data: details.issues[recordKey], touchedBy: req.session.user});
 
 
 
@@ -115,10 +126,9 @@ router.post('/changestatus',sessionChecker, function (req, res, next) {
         let details = projectArr[0].details;
         let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
         details.issues[recordKey].status = data.status;
-        details.issues[recordKey].claimedBy = data.user;
+        details.issues[recordKey].claimedBy = data.claimedBy;
         dbutils.updateProject({project: data.hash}, {details: details});
-        console.log('in here');
-        req.io.emit('change status', details.issues[recordKey]);
+        req.io.emit('change status', {data: details.issues[recordKey], touchedBy: req.session.user});
 
 
 
@@ -130,14 +140,13 @@ router.post('/changestatus',sessionChecker, function (req, res, next) {
 
 router.post('/notechange',sessionChecker, function (req, res, next) {
     let data = req.body.data;
-    console.log(data);
     let projectArr = dbutils.findAllProjects({project: data.hash});
     if (projectArr.length){
         let details = projectArr[0].details;
         let recordKey = details.issues.findIndex((e)=> { return e.name === data.currRow.name});
         details.issues[recordKey].notes = data.currRow.notes;
         dbutils.updateProject({project: data.hash}, {details: details});
-        req.io.emit('note update', details.issues[recordKey]);
+        req.io.emit('note update', {data: details.issues[recordKey], touchedBy: req.session.user});
 
 
 

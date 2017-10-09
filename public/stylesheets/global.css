@@ -20,3 +20,6 @@ input+.error-message:not(.ng-hide){
     margin-top: -5px;
     margin-bottom: 10px;
 }
+html body .button{
+    border-radius: 5px;
+}

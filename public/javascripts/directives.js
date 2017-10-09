@@ -14,7 +14,7 @@ app.directive("signupLoginDir", function(ajaxFetch){
 
             ajaxFetch.getData(url, 'POST', form).then(function(res){
 
-                if (url.includes('signup')){
+                if (url.indexOf('signup') > -1){
                     $scope.signupmessage = res.data.status;
                 }
                 // login
@@ -74,15 +74,17 @@ app.directive("getProjectsDir", function(ajaxFetch){
 
 });
 
-app.directive("chatDir", function(ajaxFetch){
+app.directive("chatDir", function(ajaxFetch, utilityFunctions){
     return{
         restrict: "EA",
-        scope: true,
+        scope: {chatGetComplete: '='},
         templateUrl: 'directive_templates/chat.html',
         link: function($scope, element, attrs) {
-            let payload = {hash: window.location.hash.substr(1)};
+            var payload = {hash: window.location.hash.substr(1)};
             ajaxFetch.getData('/getchatdata', 'GET', payload).then(function(res) {
-                $scope.chatarr = res.data;
+                $scope.chatarr = res.data.comments;
+                $scope.user = res.data.user;
+                $scope.chatGetComplete = true;
                 setTimeout(function() {
                     scrollToBottom();
                 },200);
@@ -92,8 +94,15 @@ app.directive("chatDir", function(ajaxFetch){
             socket.on('chat message', function(msg){
                 $scope.chatarr.push(msg);
                 scrollToBottom();
-                $scope.form.message = '';
-                document.getElementById('message').focus();
+                if($scope.user === msg.user){
+                    $scope.form.message = '';
+                    document.getElementById('message').focus();
+                }
+                else{
+                    utilityFunctions.sendBrowserNotification('New Chat', {body: 'From: ' + msg.user, icon: '/images/info_icon.png'});
+                }
+                $scope.$apply();
+
 
             })
 
@@ -121,38 +130,67 @@ app.directive("chatDir", function(ajaxFetch){
 
 });
 
-app.directive("defectStatusDir", function(ajaxFetch){
+app.directive("defectStatusDir", function(ajaxFetch, utilityFunctions){
     return{
         restrict: "EA",
         scope: true,
         templateUrl: 'directive_templates/defect-status.html',
         link: function($scope, element, attrs) {
-            let payload = {hash: window.location.hash.substr(1)};
+            var payload = {hash: window.location.hash.substr(1)};
             ajaxFetch.getData('/getdefects', 'GET', payload).then(function(res) {
                 $scope.defects = res.data.defects;
-                console.log($scope.defects);
                 $scope.user = res.data.user;
 
 
             });
 
-            socket.on('claim update', function(payload){
+            socket.on('claim update', function(pl){
+                var payload = pl.data;
+                var touchedBy = pl.touchedBy;
                 var idx = findRecordId(payload);
                 $scope.defects[idx] = payload;
+                if ($scope.user !== touchedBy){
+                    utilityFunctions.sendBrowserNotification('New Claim',
+                        {body: touchedBy + ' claimed ' + payload.name,
+                        icon: '/images/info_icon.png'
+                        }
+                    );
+                }
+                $scope.$apply();
 
 
             });
 
-            socket.on('note update', function(payload){
+            socket.on('note update', function(pl){
+                var payload = pl.data;
+                var touchedBy = pl.touchedBy;
                 var idx = findRecordId(payload);
                 $scope.defects[idx].notes = payload.notes;
+                if ($scope.user !== touchedBy){
+                    utilityFunctions.sendBrowserNotification('New Note',
+                        {body: touchedBy + ' updated note on ' + payload.name,
+                            icon: '/images/info_icon.png'
+                        }
+                    );
+                }
+                $scope.$apply();
 
             });
 
-            socket.on('change status', function(payload){
+            socket.on('change status', function(pl){
+                var payload = pl.data;
+                var touchedBy = pl.touchedBy;
                 var idx = findRecordId(payload);
                 $scope.defects[idx].status = payload.status;
                 $scope.defects[idx].claimedBy = payload.claimedBy;
+                if ($scope.user !== touchedBy){
+                    utilityFunctions.sendBrowserNotification('Status Update',
+                        {body: touchedBy + ' updated status on ' + payload.name,
+                            icon: '/images/info_icon.png'
+                        }
+                    );
+                }
+                $scope.$apply();
 
             });
 
@@ -202,7 +240,7 @@ app.directive("defectStatusDir", function(ajaxFetch){
             }
 
             $scope.claimItem = function(rec){
-                let payload = {
+                var payload = {
                     hash: window.location.hash.substring(1),
                     claimed: $scope.user,
                     currRow: rec
@@ -217,22 +255,21 @@ app.directive("defectStatusDir", function(ajaxFetch){
                 var idx = findRecordId(rec);
                 var user = $scope.user;
                 var newStatus = status;
+                var claimedBy = user;
                 if (newStatus === 'relinquish') {
-                    user = '';
-                    if ($scope.defects[idx].claimedBy !== ''){
-                        newStatus = 'claimed';
-                    }
-                    else{
-                        newStatus = 'open';
-                    }
+                    newStatus = 'open';
+                    claimedBy = '';
+                }
+                else {
+                    claimedBy = user;
                 }
 
 
-                let payload = {
+                var payload = {
                     hash: window.location.hash.substring(1),
                     currRow: $scope.defects[idx],
                     status: newStatus,
-                    user: user
+                    claimedBy: claimedBy
                 }
                 ajaxFetch.getData('/changestatus', 'POST', payload).then(function(res) {
                     redirect(res);
@@ -241,7 +278,7 @@ app.directive("defectStatusDir", function(ajaxFetch){
 
             $scope.noteUpdate = function(rec){
                 var idx = findRecordId(rec);
-                let payload = {
+                var payload = {
                     hash: window.location.hash.substring(1),
                     currRow: $scope.defects[idx]
                 }
@@ -258,8 +295,7 @@ app.directive("defectStatusDir", function(ajaxFetch){
 app.directive("headerBarDir", function(){
     return{
         restrict: "EA",
-        scope: {
-        },
+        scope: {heading: '@heading', avatars: '=avatars'},
         templateUrl: 'directive_templates/header-bar.html',
         link: function(scope, element, attrs) {
 

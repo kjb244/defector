@@ -1,61 +1,62 @@
-.bar{
+
+[data-module="header"] .header{
     height: 50px;
-    background-color: #497979;
+    background-color: white;
+    width: 100%;
+    position: relative;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content:center;
+
 }
 
-.bar p{
+[data-module="header"] .menu{
+    position: absolute;
+    top: 14px;
+    left: 4px;
+    display:flex;
+}
+
+[data-module="header"] .menu ul.fade-in{
+    margin-left: 12px;
+
+}
+
+[data-module="header"] .menu ul{
+    display: flex;
+    margin-left: -170px;
+    transition: all .5s linear;
+}
+
+[data-module="header"] .menu li:nth-child(n+2){
+    margin-left: 10px;
+}
+
+
+[data-module="header"] li{
+    list-style-type: none;
+}
+
+[data-module="header"] .hidden-element{
+    margin-right: auto;
+    visibility: hidden;
+}
+
+[data-module="header"] .avatars{
+    margin-left: auto;
+    padding-right: 20px;
+}
+
+[data-module="header"] .avatars ul{
+    display: flex;
     margin: 0;
-    font-size: 30px;
-    letter-spacing: 3px;
+}
+
+[data-module="header"] .avatars li{
+    border-radius: 30px;
+    background-color: #979abf;
+    margin-right: 10px;
+    width: 24px;
+    text-align: center;
     color: white;
 }
-
-.row.bar{
-    max-width: 1800px;
-}
-
-.menu{
-    position: absolute;
-    right: 30px;
-    top: 15px;
-    display: flex;
-}
-
-
-.menu a{
-    color: whitesmoke;
-    text-decoration: underline;
-}
-
-.menu a:hover{
-    color: whitesmoke;
-}
-
-.menu .fade{
-    margin-left: 6px;
-}
-
-.menu .fade.ng-hide {
-    opacity: 0;
-}
-
-.menu .fade.ng-hide-remove,
-.menu .fade.ng-hide-add {
-    display: block !important; /* or inline-block, as appropriate */
-}
-
-.menu .fade.ng-hide-remove {
-    transition: all linear 1000ms;
-}
-
-.menu .fade.ng-hide-add {
-    transition: all linear 500ms;
-}
-
-
-
-
-

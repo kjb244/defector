@@ -1,17 +1,22 @@
 <section ng-app="myApp" ng-controller="ctrlSplashPage">
   <div data-module="header-bar">
-    <div header-bar-dir></div>
+    <header-bar-dir heading="Defector" avatars="avatars"></header-bar-dir>
   </div>
   <div data-module="main-container">
-    <div class="row">
-      <div class="medium-6 columns defects-left">
-        <div defect-status-dir></div>
-      </div>
-      <div class="medium-6 columns chat-right">
-        <div chat-dir></div>
-      </div>
-
-
+    <div class="row collapse left-right-wrapper">
+      <div class="small-12 columns">
+        <div class="row collapse apply-background-color">
+          <div class = "small-11 small-centered columns">
+            <div class="flex-it">
+              <div class="defects-left">
+                <div defect-status-dir></div>
+              </div>
+              <div class="chat-right">
+                <chat-dir chat-get-complete="chatGetComplete"></chat-dir>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </section>

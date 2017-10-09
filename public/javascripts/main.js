@@ -15,7 +15,33 @@ app.controller("ctrlCreateSelectProjectPage", function($scope, ajaxFetch) {
 
 });
 
-app.controller("ctrlSplashPage", function($scope, ajaxFetch) {
+app.controller("ctrlSplashPage", function($scope, ajaxFetch, utilityFunctions) {
+
+
+    //after get call update height
+    $scope.chatGetComplete = false;
+    $scope.$watch('chatGetComplete', function(){
+        var buffer = 70;
+        var bodyHeight = utilityFunctions.getHeight('body');
+        var headerBarHeight = utilityFunctions.getHeight('[data-module="header-bar"]');
+        var h3Height = utilityFunctions.getHeight('.chat-right h3');
+        var messagingHeight = utilityFunctions.getHeight('.chat-right .messaging');
+        var remainingHeight = bodyHeight - headerBarHeight - h3Height  - messagingHeight;
+        document.querySelector('.chats').style.height = remainingHeight - buffer + 'px';
+    });
+
+    ajaxFetch.getData('/getusers', 'GET').then(function(res) {
+        $scope.avatars = res.data;
+    });
+
+
+
+
+    //ask browser permission to create notifications
+    utilityFunctions.initBrowserNotifications();
+
+
+
 
 
 });

@@ -12,6 +12,35 @@ app.service('utilityFunctions', function(){
     return false;
   }
 
+  this.getHeight = function(selector){
+    var qs = document.querySelector(selector);
+    var topMargin = window.getComputedStyle(qs).getPropertyValue('margin-top').replace('px', '');
+    var bottomMargin = window.getComputedStyle(qs).getPropertyValue('margin-bottom').replace('px', '');
+    var height = qs.clientHeight;
+    return parseInt(topMargin) + parseInt(bottomMargin) + height;
+  }
+
+  this.initBrowserNotifications = function(){
+      if (!("Notification" in window)) {
+          alert("This browser does not support desktop notification");
+      }
+
+      // Otherwise, we need to ask the user for permission
+      else if (Notification.permission !== "denied") {
+          Notification.requestPermission(function (permission) {
+          });
+      }
+  }
+
+  this.sendBrowserNotification = function(title, options){
+    title = title || '';
+    options = options || {};
+    if (title !== '' && options.length !== 0 ){
+      var n = new Notification(title, options);
+      setTimeout(n.close.bind(n), 4000);
+    }
+  }
+
 });
 
 

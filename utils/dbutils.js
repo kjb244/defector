@@ -31,7 +31,6 @@ class Dbutils {
     }
 
     findAllSP(obj){
-        console.log('here');
         return db.securityprincipal.find(obj);
     }
 

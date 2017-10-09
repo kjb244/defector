@@ -3,6 +3,54 @@
     align-items: center;
 }
 
+[data-module="main-container"] h3{
+    color: #c74242;
+}
+
+
+[data-module="main-container"] > .row{
+    max-width: 75rem;
+    padding-bottom: 20px;
+}
+
+
+[data-module="main-container"] .apply-background-color{
+    background-color: #f3f3f3;
+    padding: 10px 0 10px 0;
+}
+
+
+[data-module="main-container"] .flex-it{
+    display: flex;
+}
+
+@media (max-width: 639px) {
+    [data-module="main-container"] .flex-it{
+        flex-direction: column;
+    }
+}
+
+[data-module="main-container"] .defects-left, [data-module="main-container"] .chat-right{
+    flex: 0 0 49%;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 4px #ecd4d4
+}
+
+[data-module="main-container"] .chat-right{
+    margin-left: 2%;
+}
+
+@media (max-width: 639px) {
+    [data-module="main-container"] .chat-right{
+        margin-left: 0%;
+        margin-top: 10px;
+    }
+}
+
+
+
 [data-module="main-container"] .messaging #message{
     margin: 0;
 }
@@ -15,32 +63,43 @@
 }
 
 [data-module="main-container"] .chats{
-    height: 300px;
+    height: 0px;
     border: 1px solid #ece4e4;
     margin-bottom: 4px;
     overflow-y: auto;
 }
 
 [data-module="main-container"] .chats .chat-row{
-     padding: 6px;
-     background-color: #fbfbfb;
-     margin-bottom: 14px;
+    padding: 6px;
+    margin-bottom: 14px;
+    border-radius: 19px;
+    margin-left: 4px;
+    margin-right: 4px;
 
  }
 
 [data-module="main-container"] .chats .name-time{
     display: flex;
-    justify-content: space-between;
+    align-items: center;
 }
 
+[data-module="main-container"] .chats .message-text{
+    color: #776767;
+}
+
+
+
+
 [data-module="main-container"] .chats .name{
-    color: red;
     font-size: 15px;
     font-weight: bold;
+    color: #3c3939;
+    margin-right: 8px;
 }
 
 [data-module="main-container"] .chats .time{
     font-size: 11px;
+    opacity: .5;
 }
 
 [data-module="main-container"] .chats .messaging{
@@ -53,6 +112,22 @@
     height: 500px;
 }
 
+[data-module="main-container"] .defect-status-container {
+    position: relative;
+}
+
+[data-module="main-container"] .defect-status-container input{
+    padding-left: 40px;
+}
+
+
+[data-module="main-container"] .defect-status-container .fa-search{
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    color: #e2dddd;
+}
+
 [data-module="main-container"] .defect-container .checked{
     margin-right: 20px;
 }
@@ -60,6 +135,7 @@
 [data-module="main-container"] .defect-container .checked i:hover{
     cursor: pointer;
 }
+
 
 [data-module="main-container"] .other-content{
     transition: .2s linear all;

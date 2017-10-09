@@ -1,17 +1,32 @@
-<section>
-  <div class="row bar">
-    <p>Defector</p>
+<section data-module="header">
+  <div class="header">
+    <div class="menu">
+
+      <a href="javascript:void(0)" ng-init="showUsers=false" ng-click="showUsers=!showUsers">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+      </a>
+      <ul ng-class="{'fade-in': showUsers}">
+        <li>
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <a href="javascript:void(0)">Profile</a>
+        </li>
+        <li>
+          <i class="fa fa-sign-out" aria-hidden="true"></i>
+          <a href="/logout">Logout</a>
+
+        </li>
+      </ul>
 
 
-  </div>
-  <div class="menu">
-    <div class="cog">
-      <i ng-init="clicked=false;" ng-click="clicked=!clicked;" class="fa fa-cog" aria-hidden="true"></i>
     </div>
-    <div ng-show="clicked" class="fade">
-      <a href="logout">Log out</a>
+    <div class="hidden-element"></div>
+    <div class="heading">
+      <h4>[[heading]]</h4>
     </div>
-
-
+    <div class="avatars">
+      <ul>
+        <li ng-repeat="avatar in avatars">[[avatar]]</li>
+      </ul>
+    </div>
   </div>
 </section>
