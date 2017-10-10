@@ -27,11 +27,23 @@ app.controller("ctrlSplashPage", function($scope, ajaxFetch, utilityFunctions) {
         var h3Height = utilityFunctions.getHeight('.chat-right h3');
         var messagingHeight = utilityFunctions.getHeight('.chat-right .messaging');
         var remainingHeight = bodyHeight - headerBarHeight - h3Height  - messagingHeight;
+        if (! document.querySelector('.chats')) return;
         document.querySelector('.chats').style.height = remainingHeight - buffer + 'px';
     });
 
     ajaxFetch.getData('/getusers', 'GET').then(function(res) {
         $scope.avatars = res.data;
+    });
+
+    socket.on('user login', function(pl){
+
+        utilityFunctions.sendBrowserNotification('New User Login',
+            {body: pl.email,
+                icon: '/images/info_icon.png'
+            }
+        );
+
+
     });
 
 

@@ -14,6 +14,7 @@ app.service('utilityFunctions', function(){
 
   this.getHeight = function(selector){
     var qs = document.querySelector(selector);
+    if (!qs) return 0;
     var topMargin = window.getComputedStyle(qs).getPropertyValue('margin-top').replace('px', '');
     var bottomMargin = window.getComputedStyle(qs).getPropertyValue('margin-bottom').replace('px', '');
     var height = qs.clientHeight;

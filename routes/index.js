@@ -94,7 +94,7 @@ router.post('/postlogin', function(req, res){
     if (userFound.length) {
         req.session.user = data.email;
         res.json({status: 'valid'});
-
+        req.io.emit('user login', {email: data.email});
     }
 });
 
