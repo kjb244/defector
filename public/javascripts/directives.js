@@ -216,6 +216,30 @@ app.directive("defectStatusDir", function(ajaxFetch, utilityFunctions){
                 }
             }
 
+            $scope.showRow = function(rec){
+                if ($scope.search === '') return true;
+
+                var search = $scope.search.toLowerCase();
+
+                return rec.name.toLowerCase().indexOf(search) > -1 ||
+                        rec.description.toLowerCase().indexOf(search) > -1 ||
+                        rec.notes.toLowerCase().indexOf(search) > -1 ||
+                        $scope.getNameFromEmail(rec.claimedBy).toLowerCase().indexOf(search) > -1;
+            }
+
+            $scope.getNameFromEmail = function(user){
+                user = user || '';
+                var arr = user.split('.');
+                if (arr.length > 1){
+                    return arr[0].substring(0,1) + arr[1].substring(0,1);
+                }
+                return user.substring(0,2);
+            }
+
+            $scope.searchFilter = function(result){
+                return true;
+            }
+
 
             $scope.orderUserStatus= function(rec){
                 if (rec.claimedBy === $scope.user){

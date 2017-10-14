@@ -3,11 +3,11 @@
   <div class="defect-status-container">
     <div class="search-bar">
       <i class="fa fa-2x fa-search" aria-hidden="true"></i>
-      <input type="text" id="search" name="search" ng-model="search" placeholder="search"/>
+      <input type="text" id="search" name="search" ng-init="search = ''" ng-model="search" placeholder="search"/>
     </div>
     <div class="defect-container">
-      <div ng-repeat="rec in defects | filter: search | orderBy:orderUserStatus">
-      <div class="defect-row">
+      <div ng-repeat="rec in defects  | orderBy:orderUserStatus">
+      <div class="defect-row" ng-show="showRow(rec)">
         <div class="name-description">
           <div class="checked">
             <i ng-show="rec.status=='completed'" class="fa fa-check fa-lg"></i>
@@ -19,7 +19,7 @@
             </a> - [[rec.description]]
           </div>
           <div class="claimed-by" ng-show="rec.claimedBy != ''">
-            <span>[[rec.claimedBy.substring(0,2)]]</span>
+            <span>[[getNameFromEmail(rec.claimedBy)]]</span>
           </div>
 
         </div>
