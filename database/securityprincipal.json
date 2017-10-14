@@ -1,1 +1,12 @@
-[{"email":"kb@kb.com","password":"test","_id":"488656ace47643c085fd868779d75cf2"},{"email":"rc@rc.com","password":"test","_id":"31e6a7d8c7b74cdc9d81e0a8e10faae1"}]
+[
+  {
+    "email": "kevin.bacino@gmail.com",
+    "password": "$2a$10$iqY9G.OULmgntSAUQ0o.Ge9.M9mY/N27OCdhE2A0dgi.LFEBn4RHi",
+    "_id": "6fd04ad92c634066bb6ca5bcc319ca54"
+  },
+  {
+    "email": "nick.bacino@yahoo.com",
+    "password": "$2a$10$/J0xyQvzrN.U2ZadbJYoleF8.Um5VdimEM2JSw2Y6.S3ZTaZLXx/y",
+    "_id": "f500b8f1ffe04ea99e6c3c98a28feb8a"
+  }
+]

@@ -68,6 +68,10 @@ router.get('/getdefects', function (req, res, next) {
 router.get('/getusers', function (req, res, next) {
     let securityPrincArr = dbutils.findAllSP({});
     let rtnObj = securityPrincArr.map(function(e){
+        let arr = e.email.split('.');
+        if(arr.length > 1){
+            return arr[0].substring(0,1) + arr[1].substring(0,1);
+        }
         return e.email.substring(0,2);
     })
     return res.json(rtnObj);
@@ -75,14 +79,16 @@ router.get('/getusers', function (req, res, next) {
 
 router.post('/postsignup', function (req, res, next) {
     let data = req.body.data;
-    let userFound = db.securityprincipal.find({email: data.email});
-    if (userFound.length) {
+    let userExists = dbutils.userExists(data.email);
+    if (userExists){
         res.send(JSON.stringify({status: 'user already exists'}));
     }
-    else {
-        db.securityprincipal.save(data);
+    else{
+        dbutils.addUser(data.email, data.password);
         res.json({status: 'user created, please login'});
     }
+
+
 
 });
 
@@ -90,12 +96,17 @@ router.post('/postsignup', function (req, res, next) {
 
 router.post('/postlogin', function(req, res){
     let data = req.body.data;
-    let userFound = dbutils.findAllSP({email: data.email, password: data.password});
-    if (userFound.length) {
+    let validPw = dbutils.validPassword(data.email, data.password);
+    console.log('valid pw' + validPw);
+    if (validPw) {
         req.session.user = data.email;
         res.json({status: 'valid'});
         req.io.emit('user login', {email: data.email});
     }
+    else{
+        res.json({});
+    }
+
 });
 
 router.post('/claimchange',sessionChecker, function (req, res, next) {

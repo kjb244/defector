@@ -25,7 +25,7 @@
     </div>
     <div class="avatars">
       <ul>
-        <li ng-repeat="avatar in avatars">[[avatar]]</li>
+        <li ng-repeat="avatar in avatars track by $index">[[avatar]]</li>
       </ul>
     </div>
   </div>

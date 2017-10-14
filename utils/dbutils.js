@@ -2,6 +2,7 @@
 let db = require('diskdb');
 let bcrypt  = require('bcrypt-nodejs');
 let path = require('path');
+let saltRounds = 10;
 
 class Dbutils {
     constructor(){
@@ -12,11 +13,23 @@ class Dbutils {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     }
 
-    validPassword(password, email){
-         console.log('validating pw');
+    addUser(email, password){
+        let salt = bcrypt.genSaltSync(saltRounds);
+        let hash = bcrypt.hashSync(password, salt);
+        this.insertSP({email: email, password: hash});
+        return true;
+    }
+
+    userExists(email){
+        let user = db.securityprincipal.find({'email': email});
+        if (user.length) return true;
+        return false;
+    }
+
+    validPassword(email, password){
         let user = db.securityprincipal.find({'email': email});
         if (user.length){
-            return bcrypt.compareSync(password, user.password);
+            return bcrypt.compareSync(password, user[0].password);
         }
         return false;
 
